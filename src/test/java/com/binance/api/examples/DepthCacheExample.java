@@ -1,8 +1,8 @@
 package com.binance.api.examples;
 
-import com.binance.api.client.BinanceApiCallback;
 import com.binance.api.client.BinanceApiClientFactory;
 import com.binance.api.client.BinanceApiRestClient;
+import com.binance.api.client.BinanceApiWebSocketCallback;
 import com.binance.api.client.BinanceApiWebSocketClient;
 import com.binance.api.client.domain.event.DepthEvent;
 import com.binance.api.client.domain.market.OrderBook;
@@ -11,12 +11,7 @@ import com.binance.api.client.domain.market.OrderBookEntry;
 import java.io.Closeable;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -216,7 +211,7 @@ public class DepthCacheExample {
     new DepthCacheExample("ETHBTC");
   }
 
-  private final class WsCallback implements BinanceApiCallback<DepthEvent> {
+  private final class WsCallback implements BinanceApiWebSocketCallback<DepthEvent> {
 
     private final AtomicReference<Consumer<DepthEvent>> handler = new AtomicReference<>();
 

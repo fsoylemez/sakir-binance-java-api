@@ -1,6 +1,6 @@
 package com.binance.api.client.impl;
 
-import com.binance.api.client.BinanceApiCallback;
+import com.binance.api.client.BinanceApiWebSocketCallback;
 import com.binance.api.client.exception.BinanceApiException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,7 +16,7 @@ import java.io.IOException;
  */
 public class BinanceApiWebSocketListener<T> extends WebSocketListener {
 
-  private BinanceApiCallback<T> callback;
+  private BinanceApiWebSocketCallback<T> callback;
 
   private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -24,12 +24,12 @@ public class BinanceApiWebSocketListener<T> extends WebSocketListener {
 
   private boolean closing = false;
 
-  public BinanceApiWebSocketListener(BinanceApiCallback<T> callback, Class<T> eventClass) {
+  public BinanceApiWebSocketListener(BinanceApiWebSocketCallback<T> callback, Class<T> eventClass) {
     this.callback = callback;
     this.objectReader = mapper.readerFor(eventClass);
   }
 
-  public BinanceApiWebSocketListener(BinanceApiCallback<T> callback, TypeReference<T> eventTypeReference) {
+  public BinanceApiWebSocketListener(BinanceApiWebSocketCallback<T> callback, TypeReference<T> eventTypeReference) {
     this.callback = callback;
     this.objectReader = mapper.readerFor(eventTypeReference);
   }
@@ -47,6 +47,7 @@ public class BinanceApiWebSocketListener<T> extends WebSocketListener {
   @Override
   public void onClosing(final WebSocket webSocket, final int code, final String reason) {
     closing = true;
+    callback.onClosing(code, reason);
   }
 
   @Override
